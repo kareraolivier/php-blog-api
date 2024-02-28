@@ -1,0 +1,18 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "ft/create-blog-api",
+    "main",
+    "origin"
+  ],
+  "parent": {
+    "ft/create-blog-api": "main",
+    "main": null,
+    "origin": "main"
+  },
+  "order": [
+    "main",
+    "ft/create-blog-api",
+    "origin"
+  ]
+}
