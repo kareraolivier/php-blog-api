@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Validation\UnauthorizedException;
+
+use function Laravel\Prompts\password;
 
 class AuthController extends Controller
 {
@@ -18,10 +21,11 @@ class AuthController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Register a newly created user in storage.
      */
     public function register(Request $request)
     {
+        //validating fields for user
         $fields = $request->validate(
             [
                 'name' => 'required|string',
@@ -29,6 +33,8 @@ class AuthController extends Controller
                 'password' => 'required|string|confirmed'
             ]
         );
+
+        //creating user
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
@@ -42,6 +48,47 @@ class AuthController extends Controller
         ];
         return response($response, 201);
     }
+
+    /**
+     * Search the specified email from user.
+     */
+
+    public function getEmail(string $email)
+    {
+        return User::where('email', $email)->first();
+    }
+
+    /**
+     * Login a  user in storage.
+     */
+    public function login(Request $request)
+    {
+        $fields = $request->validate(
+            [
+                'email' => 'required',
+                'password' => 'required'
+            ]
+        );
+        //check email if it exist
+        $user = $this->getEmail($fields['email']);
+
+        //check password of a client
+        if (!$user || !Hash::check($fields['password'], $user->password)) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        };
+
+        //creating token
+        $token = $user->createToken('myapptoken')->plainTextToken;
+
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
+        return response($response, 200);
+
+        // return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
 
     /**
      * Logout the logined in user
@@ -78,15 +125,5 @@ class AuthController extends Controller
     public function destroy(string $id)
     {
         return User::destroy($id);
-    }
-
-
-    /**
-     * Search the specified resource from storage.
-     */
-
-    public function search(string $name)
-    {
-        return User::where('name', 'like', '%' . $name . '%')->get();
     }
 }
