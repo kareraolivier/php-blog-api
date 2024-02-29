@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Blogs;
 
 class BlogController extends Controller
 {
@@ -11,7 +12,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        //
+        return Blogs::all();
     }
 
     /**
@@ -19,7 +20,13 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(
+            [
+                'title' => 'required',
+                'description' => 'required'
+            ]
+        );
+        return  Blogs::create($request->all());
     }
 
     /**
@@ -27,7 +34,7 @@ class BlogController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return Blogs::all();
     }
 
     /**

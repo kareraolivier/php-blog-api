@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Blogs;
+use App\Http\Controllers\BlogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/blogs', fn () => Blogs::all());
-Route::post('/blogs', fn () => Blogs::create(["title" => "the blog", "image" => "no image", "description" => "My first blogs in php", "is_published" => true]));
+Route::get('/blogs', [BlogController::class, 'index']);
+Route::post('/blogs', [BlogController::class, 'store']);
+Route::post('/blogs/:$id', [BlogController::class, 'show']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
