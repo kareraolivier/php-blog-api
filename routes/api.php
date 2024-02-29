@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +18,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-//On this route you can access all child routes 
+//On this route you can access all child routes of blogs
 Route::resource('blogs', BlogController::class);
-Route::get('/blogs/search/{title}', [BlogController::class, 'search']);
+
+//On this route you can access all child routes of users
+Route::resource('users', AuthController::class);
+
+//search 
+//we added this : "middleware('auth:sanctum')"  to protect the route
+Route::middleware('auth:sanctum')->get('/blogs/search/{title}', [BlogController::class, 'search']);
+
+
+//This is how you add group of protected route
+
+// Route::group(['middleware' => ['auth:sanctum']], function () {
+//    Route you want to protect goes here ....... ex: Route::get('/blogs/search/{title}', [BlogController::class, 'search']);
+// });
 
 // Route::get('/blogs', [BlogController::class, 'index']);
 // Route::post('/blogs', [BlogController::class, 'store']);
