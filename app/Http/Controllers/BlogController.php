@@ -34,7 +34,7 @@ class BlogController extends Controller
      */
     public function show(string $id)
     {
-        return Blogs::all();
+        return Blogs::find($id);
     }
 
     /**
@@ -42,7 +42,9 @@ class BlogController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $update = Blogs::find($id);
+        $update->update($request->all());
+        return $update;
     }
 
     /**
@@ -50,6 +52,16 @@ class BlogController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return Blogs::destroy($id);
+    }
+
+
+    /**
+     * Search the specified resource from storage.
+     */
+
+    public function search(string $title)
+    {
+        return Blogs::where('title', 'like', '%' . $title . '%')->get();
     }
 }

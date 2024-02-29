@@ -15,9 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/blogs', [BlogController::class, 'index']);
-Route::post('/blogs', [BlogController::class, 'store']);
-Route::post('/blogs/:$id', [BlogController::class, 'show']);
+
+//On this route you can access all child routes 
+Route::resource('blogs', BlogController::class);
+Route::get('/blogs/search/{title}', [BlogController::class, 'search']);
+
+// Route::get('/blogs', [BlogController::class, 'index']);
+// Route::post('/blogs', [BlogController::class, 'store']);
+// Route::post('/blogs/:$id', [BlogController::class, 'show']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
