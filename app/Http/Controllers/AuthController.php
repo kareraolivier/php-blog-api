@@ -44,6 +44,17 @@ class AuthController extends Controller
     }
 
     /**
+     * Logout the logined in user
+     */
+    public function logout()
+    {
+        /** @var \Laravel\Sanctum\HasApiTokens $user */
+        $user = auth()->user();
+        $user->tokens()->delete();
+        return ['message' => 'Logged out'];
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(string $id)
