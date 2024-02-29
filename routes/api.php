@@ -23,6 +23,7 @@ Route::resource('blogs', BlogController::class);
 
 //On this route you can access all child routes of users
 Route::resource('users', AuthController::class);
+Route::post('/register', [AuthController::class, 'register']);
 
 //search 
 //we added this : "middleware('auth:sanctum')"  to protect the route
